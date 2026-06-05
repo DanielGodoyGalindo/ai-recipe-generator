@@ -1,42 +1,32 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
-from dotenv import load_dotenv
-from google import genai
-
-import os
-
-load_dotenv()
+from services.ai_service import generate_recipe
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Permite llamadas desde tu frontend
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+@app.route("/")
+def home():
+    return {"message": "API Flask funcionando correctamente"}
 
 
 @app.route("/generate-recipe", methods=["POST"])
-def generate_recipe():
-
+def generate_recipe_endpoint():
     data = request.get_json()
 
-    ingredients = data.get("ingredients", [])
+    if not data or "ingredients" not in data:
+        return jsonify({"error": "Debes enviar 'ingredients'"}), 400
 
-    prompt = f"""
-    Crea una receta completa usando:
+    ingredients = data["ingredients"]
+    ingredientes_texto = ", ".join(ingredients)
 
-    {", ".join(ingredients)}
+    prompt = (
+        f"Genera una receta creativa usando estos ingredientes: {ingredientes_texto}"
+    )
+    receta = generate_recipe(prompt)
 
-    Incluye:
-
-    - Nombre de la receta
-    - Ingredientes
-    - Pasos detallados
-    - Tiempo aproximado
-    """
-
-    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-
-    return jsonify({"recipe": response.text})
+    return jsonify({"recipe": receta})
 
 
 if __name__ == "__main__":
