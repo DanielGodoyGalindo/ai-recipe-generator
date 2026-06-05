@@ -1,0 +1,23 @@
+# Environment
+.env
+.env.*
+*.env
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local conf
+*.log
+*.sqlite3
+
+# System files
+.DS_Store
+Thumbs.db
