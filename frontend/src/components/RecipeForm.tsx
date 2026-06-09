@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./RecipeForm.module.css";
 
 export default function RecipeForm() {
     const [ingredients, setIngredients] = useState("");
@@ -6,6 +7,7 @@ export default function RecipeForm() {
     const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
+
         if (!ingredients.trim()) {
             alert("Introduce al menos un ingrediente");
             return;
@@ -13,7 +15,6 @@ export default function RecipeForm() {
 
         try {
             setLoading(true);
-
             const response = await fetch(
                 "http://localhost:5000/generate-recipe",
                 {
@@ -41,45 +42,32 @@ export default function RecipeForm() {
     };
 
     return (
-        <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
-            <h1>🍳 Generador de Recetas con IA</h1>
+        <div className={styles.pageWrapper}>
+            <div className={styles.container}>
 
-            <p>
-                Escribe ingredientes separados por comas.
-            </p>
+                <h1>🤖 Generador de Recetas 👨‍🍳</h1>
 
-            <input
-                type="text"
-                value={ingredients}
-                onChange={(e) => setIngredients(e.target.value)}
-                placeholder="pollo, arroz, cebolla"
-                style={{
-                    width: "100%",
-                    padding: "12px",
-                    marginBottom: "1rem",
-                }}
-            />
+                <p>Dime que ingredientes tienes en la nevera y te diré que recetas puedes preparar:</p>
 
-            <button onClick={handleGenerate}>
-                Generar receta
-            </button>
+                <input
+                    type="text"
+                    value={ingredients}
+                    onChange={(e) => setIngredients(e.target.value)}
+                    placeholder="pollo, arroz, cebolla"
+                    className={styles.input}
+                />
 
-            {loading && (
-                <p>Generando receta...</p>
-            )}
+                <button onClick={handleGenerate}>Generar receta</button>
 
-            {recipe && (
-                <div
-                    style={{
-                        marginTop: "2rem",
-                        textAlign: "left",
-                        whiteSpace: "pre-wrap",
-                    }}
-                >
-                    <h2>Receta</h2>
-                    <p>{recipe}</p>
-                </div>
-            )}
+                {loading && (<p>Generando receta...</p>)}
+
+                {recipe && (
+                    <div className={styles.recipeBox}>
+                        <h2>Receta</h2>
+                        <p>{recipe}</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
