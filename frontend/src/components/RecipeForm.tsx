@@ -16,7 +16,7 @@ export default function RecipeForm() {
         try {
             setLoading(true);
             const response = await fetch(
-                "https://ai-recipe-generator-9deg.onrender.com",
+                "https://ai-recipe-generator-9deg.onrender.com/generate-recipe",
                 {
                     method: "POST",
                     headers: {
