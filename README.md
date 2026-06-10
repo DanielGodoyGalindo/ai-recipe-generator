@@ -63,9 +63,9 @@ python app.py
 
 ---
 
-## Deployment
-Frontend: https://ai-recipe-generator-3g9dj270l-daniel-godoys-projects.vercel.app/
-Backend: https://ai-recipe-generator-9deg.onrender.com
+## 🚀 Deployment
+Frontend: <a>https://ai-recipe-generator-dusky.vercel.app/</a>
+Backend: <a>https://ai-recipe-generator-9deg.onrender.com</a>
 
 ## 🤝 Contributing
 Contributions are welcome.
