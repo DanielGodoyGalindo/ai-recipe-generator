@@ -1,28 +1,38 @@
 import os
 import requests
+from dotenv import load_dotenv
 
-API_KEY = os.getenv("OPENROUTER_API_KEY")
+load_dotenv()
 
-print("API KEY EXISTS:", API_KEY is not None)
-print("API KEY LENGTH:", len(API_KEY) if API_KEY else 0)
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
 def generate_recipe(prompt: str) -> str:
-    response = requests.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {API_KEY}",
-            "Content-Type": "application/json",
-        },
-        json={
-            "model": "meta-llama/llama-3.1-8b-instruct",
-            "messages": [{"role": "user", "content": prompt}],
-        },
-    )
     
+    print("API KEY EXISTS:", OPENROUTER_API_KEY is not None)
+    print("API KEY LENGTH:", len(OPENROUTER_API_KEY) if OPENROUTER_API_KEY else 0)
+    
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+    }
+
+    data = {
+        "model": "nex-agi/nex-n2-pro:free",
+        "messages": [{"role": "user", "content": prompt}],
+    }
+
+    print("Sending request...")
+
+    response = requests.post(OPENROUTER_URL, headers=headers, json=data, timeout=30)
+
     print("Status:", response.status_code)
-    print("Body:", response.text)
+    print("Body:", response.text[:500])
 
     response.raise_for_status()
 
-    return response.json()["choices"][0]["message"]["content"]
+    result = response.json()
+
+    return result["choices"][0]["message"]["content"]
